@@ -1,0 +1,57 @@
+tree("Root")
+    parallel
+        repeat mute tree("Alive")
+        repeat mute tree("Dead")
+
+tree("Alive")
+    fallback
+        while not IsHealthLessThan(100.0)
+            fallback
+                while not SeePlayer
+                    fallback
+                        while WasLastPlayerSightedLessThan(5)
+                            sequence
+                                ExactSearchForPlayer
+                                MoveToDestination
+                        while WasLastPlayerSightedLessThan(30)
+                            sequence
+                                SearchForPlayer
+                                MoveToDestination
+                        while not WasLastPlayerSightedLessThan(30)
+                            fallback
+                                while IsHealthLessThan(250.0)
+                                    sequence
+                                        PickHealStation
+                                        MoveToDestination
+                                while not IsHealthLessThan(250.0)
+                                    sequence
+                                        Roam
+                                        MoveToDestination
+                while SeePlayer
+                    sequence
+                        UpdatePlayerLocation
+                        TargetPlayer
+                        LookAtTarget
+                        fallback
+                            while ShotLinedUp
+                                sequence
+                                    Snipe
+                                    Wait(0.125)
+                            while not ShotLinedUp
+                                sequence
+                                    SetTargetDestination
+                                    MoveToDestination
+        while IsHealthLessThan(100.0)
+            fallback
+                while not SeePlayer
+                    sequence
+                        PickHealStation
+                        MoveToDestination
+                while SeePlayer
+                    sequence
+                        Retreat
+                        MoveToDestination
+         
+tree("Dead")
+    while IsHealthLessThan(0.1)
+        Explode
